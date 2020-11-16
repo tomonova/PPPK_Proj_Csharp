@@ -18,6 +18,9 @@ namespace Models
         }
         public int IDGrad { get; set; }
         public string Ime { get; set; }
-        public Drzava Drzava { get; set; }
+        public int DrzavaID { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public override string ToString() => $"Ime";
     }
 }

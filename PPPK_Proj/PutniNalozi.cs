@@ -125,7 +125,7 @@ namespace PPPK_Proj
             }
             if (selektaniPutniNalozi.Any())
             {
-                potvrda = MessageBox.Show($"Želiš li obristai odabrane naloge?"
+                potvrda = MessageBox.Show($"Želiš li orisati odabrane naloge?"
                 , "POTVRDI BRISANJE"
                 , MessageBoxButtons.OKCancel
                 , MessageBoxIcon.Warning);
@@ -197,7 +197,6 @@ namespace PPPK_Proj
             {
                 MessageBox.Show($"Nisi odabrao niti jedan nalog");
             }
-            
         }
         public void RefreshPN()
         {

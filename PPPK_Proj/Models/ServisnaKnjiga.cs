@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class ServisnaKnjiga
+    public class Servis
     {
         public int ID { get; set; }
         public Vozilo Vozilo { get; set; }
