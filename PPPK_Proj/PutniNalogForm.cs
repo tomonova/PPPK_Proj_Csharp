@@ -18,6 +18,7 @@ namespace PPPK_Proj
         private int? _IDNalog;
         private const string headerTekst = "--BIRAJ--";
         private const string dateTimeFormat = "yyyy-MM-dd HH:mm";
+        private const string emptyDate = "0001-01-01 00:00";
         PutniNalozi pn; 
         public PutniNalogForm(PutniNalozi putniNalozi, int? IDNalog)
         {
@@ -107,30 +108,60 @@ namespace PPPK_Proj
             FillComboBox(cbVozac, dtVozaci);
             FillComboBox(cbVozilo, dtVozila);
             FillComboBox(cbStatusNaloga, dtNalogStatus);
+            cbVozac.Enabled = false;
+            cbVozilo.Enabled = false;
         }
 
         private void FillComboBox(ComboBox comboBox, DataTable dataTable)
         {
             comboBox.ValueMember = dataTable.Columns[0].ToString();
             comboBox.DisplayMember = dataTable.Columns[1].ToString();
-            if (dataTable.Rows[0].ItemArray[1].ToString() != headerTekst)
+            if ( dataTable.Rows.Count==0 || dataTable.Rows[0].ItemArray[1].ToString() != headerTekst)
             {
-                DataRow headerItem = dataTable.NewRow();
-                headerItem[0] = 0;
-                headerItem[1] = headerTekst;
-                dataTable.Rows.InsertAt(headerItem, 0);
+                createHeader(dataTable);
             }
             comboBox.DataSource = dataTable;
+        }
+
+        private static void createHeader(DataTable dataTable)
+        {
+            DataRow headerItem = dataTable.NewRow();
+            headerItem[0] = 0;
+            headerItem[1] = headerTekst;
+            dataTable.Rows.InsertAt(headerItem, 0);
         }
 
         private void dtpOtvaranje_ValueChanged(object sender, EventArgs e)
         {
             dtpOtvaranje.CustomFormat = dateTimeFormat;
-        }
+        }   
 
         private void dtpZatvaranje_ValueChanged(object sender, EventArgs e)
         {
             dtpZatvaranje.CustomFormat = dateTimeFormat;
+            DateTime dtO = String.IsNullOrWhiteSpace(dtpOtvaranje.Text) ? new DateTime() : DateTime.Parse(dtpOtvaranje.Text);
+            DateTime dtZ = String.IsNullOrWhiteSpace(dtpZatvaranje.Text) ? new DateTime() : DateTime.Parse(dtpZatvaranje.Text);
+            if (checkDateRange(dtO,dtZ))
+            {
+                DataTable dtVozaci = SqlHandler.GetVozaciFree(dtO,dtZ);
+                DataTable dtVozila = SqlHandler.GetVozilaFree(dtO,dtZ);
+                FillComboBox(cbVozac, dtVozaci);
+                FillComboBox(cbVozilo, dtVozila);
+                cbVozac.Enabled = true;
+                cbVozilo.Enabled = true;
+            }
+            else
+            {
+                cbVozac.Enabled = false;
+                cbVozilo.Enabled = false;
+            }
+        }
+
+        private bool checkDateRange(DateTime dtO, DateTime dtZ)
+        {
+            if ((dtO == DateTime.Parse(emptyDate) || dtZ == DateTime.Parse(emptyDate)) || (dtZ < dtO))
+                return false;
+            return true;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -148,7 +179,7 @@ namespace PPPK_Proj
             }
             DateTime dtO = String.IsNullOrWhiteSpace(dtpOtvaranje.Text) ? new DateTime(): DateTime.Parse(dtpOtvaranje.Text);
             DateTime dtZ = String.IsNullOrWhiteSpace(dtpZatvaranje.Text) ? new DateTime() : DateTime.Parse(dtpZatvaranje.Text);
-            if (dtZ == DateTime.Parse("0001-01-01 00:00")||dtZ>dtO)
+            if (dtZ == DateTime.Parse(emptyDate) ||dtZ>dtO)
             {
                 PutniNalog putni = new PutniNalog(
                     _IDNalog.HasValue ? _IDNalog.Value : 0,

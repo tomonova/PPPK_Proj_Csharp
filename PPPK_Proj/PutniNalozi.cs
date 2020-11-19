@@ -21,7 +21,7 @@ namespace PPPK_Proj
         private int filterChoice = 0;
         private const string headerTekst = "--BIRAJ--";
         private const string filterItem = "SVI";
-        private const string dateTimeFormat = "dd/MM/yyy HH:mm";
+        private const string dateTimeFormat = "yyyy/MM/dd HH:mm";
         public PutniNalozi()
         {
             InitializeComponent();
@@ -29,7 +29,6 @@ namespace PPPK_Proj
         }
         private void PutniNalozi_Load(object sender, EventArgs e)
         {
-
             FillGrid();
             FillFilter();
         }
@@ -209,6 +208,11 @@ namespace PPPK_Proj
 
             e.SortResult = String.Compare(value1, value2);
             e.Handled = true;
+        }
+
+        private void dgPutniNalozi_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
         }
     }
 }

@@ -29,13 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgPutniNalozi = new System.Windows.Forms.DataGridView();
             this.cbStatusNaloga = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAddPN = new System.Windows.Forms.Button();
             this.btnUredi = new System.Windows.Forms.Button();
             this.btnObrisiNalog = new System.Windows.Forms.Button();
+            this.sqlHandlerBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.txIDNalog = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txOtvaranje = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txZatvaranje = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,7 +48,6 @@
             this.cbMjestoCilj = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cbStatus = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.sqlHandlerBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgPutniNalozi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sqlHandlerBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -66,20 +68,21 @@
             this.cbMjestoCilj,
             this.cbStatus,
             this.Column1});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgPutniNalozi.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPutniNalozi.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgPutniNalozi.Location = new System.Drawing.Point(16, 70);
             this.dgPutniNalozi.Name = "dgPutniNalozi";
             this.dgPutniNalozi.RowHeadersVisible = false;
             this.dgPutniNalozi.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgPutniNalozi.Size = new System.Drawing.Size(1319, 667);
             this.dgPutniNalozi.TabIndex = 0;
+            this.dgPutniNalozi.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgPutniNalozi_DataError);
             this.dgPutniNalozi.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dgPutniNalozi_Scroll);
             this.dgPutniNalozi.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dgPutniNalozi_SortCompare);
             // 
@@ -138,6 +141,10 @@
             this.btnObrisiNalog.UseVisualStyleBackColor = false;
             this.btnObrisiNalog.Click += new System.EventHandler(this.btnObrisiNalog_Click);
             // 
+            // sqlHandlerBindingSource
+            // 
+            this.sqlHandlerBindingSource.DataSource = typeof(PPPK_Proj.DAO.SqlHandler);
+            // 
             // txIDNalog
             // 
             this.txIDNalog.DataPropertyName = "IDNalog";
@@ -150,6 +157,9 @@
             // 
             this.txOtvaranje.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.txOtvaranje.DataPropertyName = "OtvaranjeNaloga";
+            dataGridViewCellStyle1.Format = "yyyy/MM/dd HH:mm";
+            dataGridViewCellStyle1.NullValue = null;
+            this.txOtvaranje.DefaultCellStyle = dataGridViewCellStyle1;
             this.txOtvaranje.FillWeight = 90.2379F;
             this.txOtvaranje.HeaderText = "Otvaranje";
             this.txOtvaranje.Name = "txOtvaranje";
@@ -159,6 +169,9 @@
             // 
             this.txZatvaranje.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.txZatvaranje.DataPropertyName = "ZatvaranjeNaloga";
+            dataGridViewCellStyle2.Format = "yyyy/MM/dd HH:mm";
+            dataGridViewCellStyle2.NullValue = null;
+            this.txZatvaranje.DefaultCellStyle = dataGridViewCellStyle2;
             this.txZatvaranje.FillWeight = 90.2379F;
             this.txZatvaranje.HeaderText = "Zatvaranje";
             this.txZatvaranje.Name = "txZatvaranje";
@@ -222,10 +235,6 @@
             this.Column1.HeaderText = "Odaberi";
             this.Column1.Name = "Column1";
             this.Column1.Width = 50;
-            // 
-            // sqlHandlerBindingSource
-            // 
-            this.sqlHandlerBindingSource.DataSource = typeof(PPPK_Proj.DAO.SqlHandler);
             // 
             // PutniNalozi
             // 

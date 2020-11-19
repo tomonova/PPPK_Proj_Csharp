@@ -30,6 +30,7 @@ namespace PPPK_Proj.DAO
         private const string STATUS_NALOGA = "@StatusNaloga";
         private const string TIP_VREMENA = "@TipVremena";
         private const string dateTimeFormat = "yyyy-MM-dd HH:mm";
+        private const string emptyDate = "0001-01-01 00:00";
         internal static List<Vozac> GetVozaci()
         {
             List<Vozac> vozaci = new List<Vozac>();
@@ -165,38 +166,50 @@ namespace PPPK_Proj.DAO
                 con.Open();
                 using (SqlCommand cmd = con.CreateCommand())
                 {
-                    cmd.CommandText = nameof(AddEditPN);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(ID_PUTNI_NALOG, SqlDbType.Int);
-                    cmd.Parameters[ID_PUTNI_NALOG].Value = pn.IDPutniNalog;
-                    if (pn.Otvaranje==DateTime.Parse("0001-01-01 00:00"))
-                        cmd.Parameters.AddWithValue(OTVARANJE_PN, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(OTVARANJE_PN, pn.Otvaranje.ToString(dateTimeFormat));
-                    if (pn.Zatvaranje == DateTime.Parse("0001-01-01 00:00"))
-                        cmd.Parameters.AddWithValue(ZATVARANJE_PN, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(ZATVARANJE_PN, pn.Otvaranje.ToString(dateTimeFormat));
-                    if (pn.Vozac.IDVozac == 0)
-                        cmd.Parameters.AddWithValue(VOZAC_ID, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(VOZAC_ID, pn.Vozac.IDVozac);
-                    if (pn.Vozilo.IDVozilo == 0)
-                        cmd.Parameters.AddWithValue(VOZILO_ID, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(VOZILO_ID, pn.Vozilo.IDVozilo);
-                    if (pn.Start.IDGrad == 0)
-                        cmd.Parameters.AddWithValue(MJESTOSTART_ID, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(MJESTOSTART_ID, pn.Start.IDGrad);
-                    if (pn.Cilj.IDGrad == 0)
-                        cmd.Parameters.AddWithValue(MJESTOCILJ_ID, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(MJESTOCILJ_ID, pn.Cilj.IDGrad);
-                    if (pn.NalogStatus == 0)
+                    SqlTransaction transaction;
+                    transaction = con.BeginTransaction("AddEditPN");
+                    cmd.Transaction = transaction;
+                    try
+                    {
+                        cmd.CommandText = nameof(AddEditPN);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(ID_PUTNI_NALOG, SqlDbType.Int);
+                        cmd.Parameters[ID_PUTNI_NALOG].Value = pn.IDPutniNalog;
+                        if (pn.Otvaranje == DateTime.Parse(emptyDate))
+                            cmd.Parameters.AddWithValue(OTVARANJE_PN, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(OTVARANJE_PN, pn.Otvaranje.ToString(dateTimeFormat));
+                        if (pn.Zatvaranje == DateTime.Parse(emptyDate))
+                            cmd.Parameters.AddWithValue(ZATVARANJE_PN, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(ZATVARANJE_PN, pn.Otvaranje.ToString(dateTimeFormat));
+                        if (pn.Vozac.IDVozac == 0)
+                            cmd.Parameters.AddWithValue(VOZAC_ID, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(VOZAC_ID, pn.Vozac.IDVozac);
+                        if (pn.Vozilo.IDVozilo == 0)
+                            cmd.Parameters.AddWithValue(VOZILO_ID, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(VOZILO_ID, pn.Vozilo.IDVozilo);
+                        if (pn.Start.IDGrad == 0)
+                            cmd.Parameters.AddWithValue(MJESTOSTART_ID, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(MJESTOSTART_ID, pn.Start.IDGrad);
+                        if (pn.Cilj.IDGrad == 0)
+                            cmd.Parameters.AddWithValue(MJESTOCILJ_ID, DBNull.Value);
+                        else
+                            cmd.Parameters.AddWithValue(MJESTOCILJ_ID, pn.Cilj.IDGrad);
+                        if (pn.NalogStatus == 0)
                             cmd.Parameters.AddWithValue(STATUS_NALOGA, DBNull.Value);
-                    else
-                        cmd.Parameters.AddWithValue(STATUS_NALOGA, pn.NalogStatus);
+                        else
+                            cmd.Parameters.AddWithValue(STATUS_NALOGA, pn.NalogStatus);
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw ex;
+                    }
                     return cmd.ExecuteNonQuery();
                 }
             }
@@ -221,6 +234,27 @@ namespace PPPK_Proj.DAO
             return mjesto;
         }
 
+        internal static DataTable GetVozilaFree(DateTime dtO, DateTime dtZ)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlMessagesSubscription(con);
+                con.Open();
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = nameof(GetVozilaFree);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue(OTVARANJE_PN, dtO.ToString(dateTimeFormat));
+                    cmd.Parameters.AddWithValue(ZATVARANJE_PN, dtZ.ToString(dateTimeFormat));
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            return dt;
+        }
         internal static DataTable GetVozilaCB()
         {
             DataTable dt = new DataTable();
@@ -241,6 +275,27 @@ namespace PPPK_Proj.DAO
             return dt;
         }
 
+        internal static DataTable GetVozaciFree(DateTime dtO, DateTime dtZ)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlMessagesSubscription(con);
+                con.Open();
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = nameof(GetVozaciFree);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue(OTVARANJE_PN, dtO.ToString(dateTimeFormat));
+                    cmd.Parameters.AddWithValue(ZATVARANJE_PN, dtZ.ToString(dateTimeFormat));
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            return dt;
+        }
         internal static DataTable GetVozaciCB()
         {
             DataTable dt = new DataTable();
