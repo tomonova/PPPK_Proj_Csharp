@@ -1,5 +1,5 @@
-create database PPPK_PROJ
-use PPPK_PROJ
+create database PPPK_PROJ2
+use PPPK_PROJ2
 
 create table VOZACI
 (
@@ -250,4 +250,122 @@ go
 create or alter proc GetVozila
 as
 	select * from Vozila
+go
+create or alter PROC GetVozilaFree
+	@Otvaranje datetime,
+	@Zatvaranje datetime
+AS 
+	select IDVozilo,Marka+' '+Tip as Vozilo from VOZILA 
+	where IDVozilo not in
+	(
+		select distinct(voziloid) from PUTNI_NALOZI
+		where (@Zatvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
+		or (@Otvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
+		or (@Otvaranje< Zatvaranje and @Zatvaranje > Zatvaranje)
+	)
+	order by 2 asc
+go
+create or alter proc GetVozaciFree
+	@Otvaranje datetime,
+	@Zatvaranje datetime
+AS 
+	select IDVozac,Prezime +' '+ Ime as PrezimeIme from VOZACI 
+	where IDVozac not in
+	(
+		select distinct(vozacID) from PUTNI_NALOZI
+		where (@Zatvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
+		or (@Otvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
+		or (@Otvaranje< Zatvaranje and @Zatvaranje > Zatvaranje)
+	)
+	order by 2 asc
+go
+create or alter proc DBINIT
+as
+	insert into SERVISNA_KNJIGA(VoziloID, Datum, Trosak) values((select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),'2020-10-29',1345.55)
+	insert into SERVISNA_KNJIGA(VoziloID, Datum, Trosak) values((select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),'2020-09-12',1622.00)
+	insert into SERVISNA_KNJIGA(VoziloID, Datum, Trosak) values((select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),'2020-11-11',985.35)
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2019-04-13 09:00:12','2019-05-05 11:13:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),1)
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2020-07-13 09:30:12','2020-07-25 19:19:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),2)	
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2020-07-21 09:15:12','2020-07-29 16:13:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),3)
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2019-06-17 09:00:12','2019-06-25 14:23:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),1)
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2020-10-13 09:00:12','2020-10-15 11:13:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),2)
+	insert into PUTNI_NALOZI(Otvaranje, Zatvaranje, VozacID, VoziloID, MjestoStartID, MjestoCiljID, StatusNaloga)
+		values('2020-11-23 11:00:12','2020-11-29 17:45:22',
+		(select IDVozac from (select row_number() over (order by (select null)) as ROWNUM,IDVozac from VOZACI) x
+		where ROWNUM = (select round((SELECT RAND()*(5-0)+1),0))),
+		(select IDVozilo from (select row_number() over (order by (select null)) as ROWNUM,IDVozilo from VOZILA) x
+		where ROWNUM = (select round((SELECT RAND()*(3-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),
+		(select IDGrad from (select row_number() over (order by (select null)) as ROWNUM,IDGrad from GRADOVI) x
+		where ROWNUM = (select round((SELECT RAND()*(500-0)+1),0))),3)
+		
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
