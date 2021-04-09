@@ -1,11 +1,14 @@
-﻿using Models;
+﻿using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+using Models;
 using PPPK_Proj.Utils;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +18,7 @@ namespace PPPK_Proj.DAO
     static class SqlHandler
     {
         private static string cs = ConfigurationManager.ConnectionStrings["cs"].ConnectionString;
+        private static SqlDatabase db = new SqlDatabase(cs);
         private const string ID_VOZAC = "@IDVozac";
         private const string ID_PUTNI_NALOG = "@IDNalog";
         private const string VOZAC_ID = "@VozacID";
@@ -31,6 +35,8 @@ namespace PPPK_Proj.DAO
         private const string TIP_VREMENA = "@TipVremena";
         private const string dateTimeFormat = "yyyy-MM-dd HH:mm";
         private const string emptyDate = "0001-01-01 00:00";
+        private static readonly string[] TABLICE = { "SERVISNA_KNJIGA", "PUTNI_NALOZI", "GRADOVI", "DRZAVE", "VOZACI", "VOZILA" };
+
         internal static List<Vozac> GetVozaci()
         {
             List<Vozac> vozaci = new List<Vozac>();
@@ -82,6 +88,235 @@ namespace PPPK_Proj.DAO
             return dt;
         }
 
+        internal static bool CheckFiles(string selectedPath)
+        {
+            List<string> xmlFiles = Directory.GetFiles(selectedPath, "*.xml").ToList();
+            if (xmlFiles == null)
+                return false;
+            List<string> checkTables = TABLICE.ToList();
+            List<string> fileNames = getFileNames(xmlFiles);
+            foreach (string tableName in checkTables)
+            {
+                if (!fileNames.Contains(tableName))
+                    return false;
+            }
+            return true;
+        }
+
+        private static List<string> getFileNames(List<string> xmlFiles)
+        {
+            List<string> tempList = new List<string>();
+            foreach (string fileName in xmlFiles)
+            {
+                tempList.Add(Path.GetFileNameWithoutExtension(fileName));
+            }
+            return tempList;
+        }
+
+        internal static void ImportData(string selectedPath)
+        {
+            DataSet ds = new DataSet("importPodataka");
+            List<string> xmlFiles = Directory.GetFiles(selectedPath, "*.xml").ToList();
+            try
+            {
+                foreach (string xmlFile in xmlFiles)
+                {
+                    ds.ReadXml(xmlFile, XmlReadMode.ReadSchema);
+                }
+                CreateTables();
+                ImportTables(ds);
+                AddConstraint();
+                SetDBStatus(DBSTatus.FULL);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void CreateTables() => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name);
+        private static void ImportTables(DataSet ds)
+        {
+            InitinsertServisnaKnjiga(ds.Tables[TABLICE[0]]);
+            InitinsertPutniNalozi(ds.Tables[TABLICE[1]]);
+            InitinsertGradovi(ds.Tables[TABLICE[2]]);
+            InitinsertDrzave(ds.Tables[TABLICE[3]]);
+            InitinsertVozaca(ds.Tables[TABLICE[4]]);
+            InitinsertVozila(ds.Tables[TABLICE[5]]);
+        }
+
+        private static void InitinsertServisnaKnjiga(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1], row[2], row[3]);
+            }
+        }
+
+        private static void InitinsertPutniNalozi(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+            }
+        }
+
+        private static void InitinsertVozila(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1].ToString(), row[2].ToString(), row[3], row[4], row[5]);
+            }
+        }
+
+        private static void InitinsertVozaca(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1].ToString(), row[2].ToString(), row[3].ToString(), row[4].ToString(), row[5]);
+            }
+        }
+
+        private static void InitinsertGradovi(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1].ToString(), row[2], row[3], row[4]);
+            }
+        }
+
+        private static void InitinsertDrzave(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1].ToString());
+            }
+        }
+        private static void AddConstraint() => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name);
+        private static void SetDBStatus(DBSTatus status) => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, status);
+
+        internal static void ExportData(string selectedPath)
+        {
+            DataSet ds = new DataSet("SviPodaci");
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlMessagesSubscription(con);
+                con.Open();
+                using (SqlDataAdapter da = new SqlDataAdapter(MethodBase.GetCurrentMethod().Name, con))
+                {
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.Fill(ds);
+                    SetTableNames(ds);
+                    try
+                    {
+                        SaveXML(ds, selectedPath);
+                        MessageBox.Show("Podaci uspješno exportani", "EXPORT PODATKA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        internal static void CreatePutniNaloziXML(List<int> selektaniPutniNalozi, string fileName)
+        {
+            string putniNaloziID = string.Join(",", selektaniPutniNalozi.ToArray());
+            try
+            {
+                DataSet ds = CreatePNDataSet(putniNaloziID);
+                ds.WriteXml(fileName, XmlWriteMode.WriteSchema);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        internal static DataSet CreatePNDataSet(string putniNaloziID)
+        {
+            string[] tablice4XML = { TABLICE[1], TABLICE[2], TABLICE[4], TABLICE[5] };
+            DataSet ds = new DataSet("PutniNalozi");
+            db.LoadDataSet(MethodBase.GetCurrentMethod().Name, ds, tablice4XML, putniNaloziID);
+            DataRelation pn2GradStartRelation = new DataRelation
+                (
+                    "pn2GradStartRelation",
+                    ds.Tables[1].Columns[nameof(Grad.IDGrad)],
+                    ds.Tables[0].Columns["MjestoStartID"]
+                );
+            ds.Relations.Add(pn2GradStartRelation);
+            DataRelation pn2GradCiljRelation = new DataRelation
+                (
+                    "pn2GradCiljRelation",
+                    ds.Tables[1].Columns[nameof(Grad.IDGrad)],
+                    ds.Tables[0].Columns["MjestoCiljID"]
+                );
+            ds.Relations.Add(pn2GradCiljRelation);
+            DataRelation pn2VozacRelation = new DataRelation
+                (
+                    "pn2VozacRelation",
+                    ds.Tables[2].Columns[nameof(Vozac.IDVozac)],
+                    ds.Tables[0].Columns["VozacID"]
+                );
+            ds.Relations.Add(pn2VozacRelation);
+            DataRelation pn2VoziloRelation = new DataRelation
+                (
+                    "pn2VoziloRelation",
+                    ds.Tables[3].Columns[nameof(Vozilo.IDVozilo)],
+                    ds.Tables[0].Columns["VoziloID"]
+                );
+            ds.Relations.Add(pn2VoziloRelation);
+            return ds;
+        }
+        internal static int ImportPutniNaloziXML(string fileName)
+        {
+            DataSet ds = new DataSet("importPodataka");
+            try
+            {
+                ds.ReadXml(fileName, XmlReadMode.ReadSchema);
+                return InsertPutniNalog(ds.Tables[0]);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static int InsertPutniNalog(DataTable dataTable)
+        {
+            int insertedNum = 0;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                 insertedNum += db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+            }
+            return insertedNum;
+        }
+
+        private static void SetTableNames(DataSet ds)
+        {
+            for (int i = 0; i < TABLICE.Length; i++)
+            {
+                ds.Tables[i].TableName = TABLICE[i];
+            }
+        }
+
+        private static void SaveXML(DataSet ds, string selectedPath)
+        {
+            for (int i = 0; i < TABLICE.Length; i++)
+            {
+                try
+                {
+                    ds.Tables[i].WriteXml($"{selectedPath}\\{TABLICE[i]}.xml", XmlWriteMode.WriteSchema);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         internal static string GetStatusNalogaPN(int iDNalog)
         {
             string status = "";
@@ -100,6 +335,9 @@ namespace PPPK_Proj.DAO
             }
             return status;
         }
+
+        internal static bool GetDBStatus() => Convert.ToBoolean(db.ExecuteScalar(MethodBase.GetCurrentMethod().Name));
+        internal static void DeletePodataka() => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name);
 
         internal static string GetVoziloPN(int iDNalog)
         {
@@ -182,7 +420,7 @@ namespace PPPK_Proj.DAO
                         if (pn.Zatvaranje == DateTime.Parse(emptyDate))
                             cmd.Parameters.AddWithValue(ZATVARANJE_PN, DBNull.Value);
                         else
-                            cmd.Parameters.AddWithValue(ZATVARANJE_PN, pn.Otvaranje.ToString(dateTimeFormat));
+                            cmd.Parameters.AddWithValue(ZATVARANJE_PN, pn.Zatvaranje.ToString(dateTimeFormat));
                         if (pn.Vozac.IDVozac == 0)
                             cmd.Parameters.AddWithValue(VOZAC_ID, DBNull.Value);
                         else
@@ -360,78 +598,22 @@ namespace PPPK_Proj.DAO
 
         internal static Vozac GetVozac(int idVozac)
         {
-
-            Vozac vozac = null;
-            using (SqlConnection con = new SqlConnection(cs))
+            using (DataSet ds = db.ExecuteDataSet(MethodBase.GetCurrentMethod().Name, idVozac))
             {
-                SqlMessagesSubscription(con);
-                con.Open();
-                using (SqlCommand cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = nameof(GetVozac);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(ID_VOZAC, SqlDbType.Int);
-                    cmd.Parameters[ID_VOZAC].Value = idVozac;
-                    using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr.Read())
-                        {
-                            vozac = new Vozac
+                DataRow dr = ds?.Tables?[0]?.Rows?[0];
+                return dr != null ? new Vozac
                             (
                                 (int)dr[nameof(Vozac.IDVozac)],
                                 dr[nameof(Vozac.Ime)].ToString(),
                                 dr[nameof(Vozac.Prezime)].ToString(),
                                 dr[nameof(Vozac.Mobitel)].ToString(),
                                 dr[nameof(Vozac.VozackaDozvola)].ToString()
-                            );
-                        }
-                    }
-                }
-            }
-            return vozac;
-        }
-
-        internal static int DelVozac(Vozac vozac)
-        {
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                SqlMessagesSubscription(con);
-                con.Open();
-                using (SqlCommand cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = nameof(DelVozac);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(ID_VOZAC, SqlDbType.Int);
-                    cmd.Parameters[ID_VOZAC].Value = vozac.IDVozac;
-                    int result = cmd.ExecuteNonQuery();
-                    return result;
-                }
+                            ) : null;
             }
         }
-
-        internal static void AddVozac(Vozac vozac)
-        {
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                SqlMessagesSubscription(con);
-                con.Open();
-                using (SqlCommand cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = nameof(AddVozac);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(IME_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[IME_VOZAC].Value = vozac.Ime;
-                    cmd.Parameters.Add(PREZIME_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[PREZIME_VOZAC].Value = vozac.Prezime;
-                    cmd.Parameters.Add(MOBITEL_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[MOBITEL_VOZAC].Value = vozac.Mobitel;
-                    cmd.Parameters.Add(VOZACKA_DOZVOLA_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[VOZACKA_DOZVOLA_VOZAC].Value = vozac.VozackaDozvola;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
+        internal static void AddVozac(Vozac vozac) => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, vozac.Ime, vozac.Prezime, vozac.Mobitel, vozac.VozackaDozvola);
+        internal static void EditVozac(Vozac vozac) => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, vozac.IDVozac, vozac.Ime, vozac.Prezime, vozac.Mobitel, vozac.VozackaDozvola);
+        internal static int DelVozac(Vozac vozac) => db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, vozac.IDVozac);
         internal static int DelPutniNalog(List<int> selektaniPutniNalozi)
         {
             using (SqlConnection con = new SqlConnection(cs))
@@ -451,31 +633,6 @@ namespace PPPK_Proj.DAO
                         cmd.Parameters.Clear();
                     }
                     return result;
-                }
-            }
-        }
-
-        internal static void EditVozac(Vozac vozac)
-        {
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                SqlMessagesSubscription(con);
-                con.Open();
-                using (SqlCommand cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = nameof(EditVozac);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(ID_VOZAC, SqlDbType.Int);
-                    cmd.Parameters[ID_VOZAC].Value = vozac.IDVozac;
-                    cmd.Parameters.Add(IME_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[IME_VOZAC].Value = vozac.Ime;
-                    cmd.Parameters.Add(PREZIME_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[PREZIME_VOZAC].Value = vozac.Prezime;
-                    cmd.Parameters.Add(MOBITEL_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[MOBITEL_VOZAC].Value = vozac.Mobitel;
-                    cmd.Parameters.Add(VOZACKA_DOZVOLA_VOZAC, SqlDbType.NVarChar);
-                    cmd.Parameters[VOZACKA_DOZVOLA_VOZAC].Value = vozac.VozackaDozvola;
-                    cmd.ExecuteNonQuery();
                 }
             }
         }

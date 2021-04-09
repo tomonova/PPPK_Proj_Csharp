@@ -16,6 +16,16 @@ namespace Models
         {
             IDVozilo = id;
         }
+
+        public Vozilo(int iDVozilo, string tip, string marka, DateTime godinaProizvodnje, DateTime godinaUnosa, int inicijalniKM) : this(iDVozilo)
+        {
+            Tip = tip;
+            Marka = marka;
+            GodinaProizvodnje = godinaProizvodnje;
+            GodinaUnosa = godinaUnosa;
+            InicijalniKM = inicijalniKM;
+        }
+
         public int IDVozilo { get; set; }
         public string  Tip { get; set; }
         public string Marka { get; set; }

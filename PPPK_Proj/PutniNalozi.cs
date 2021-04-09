@@ -112,16 +112,8 @@ namespace PPPK_Proj
 
         private void btnObrisiNalog_Click(object sender, EventArgs e)
         {
-            List<int> selektaniPutniNalozi = new List<int>();
+            List<int> selektaniPutniNalozi = SelectPuntiNalozi();
             DialogResult potvrda = DialogResult.Cancel;
-            foreach (DataGridViewRow row in dgPutniNalozi.Rows)
-            {
-                bool isSelected = Convert.ToBoolean(row.Cells[8].Value);
-                if (isSelected == true)
-                {
-                    selektaniPutniNalozi.Add(int.Parse(row.Cells[0].Value.ToString()));
-                }
-            }
             if (selektaniPutniNalozi.Any())
             {
                 potvrda = MessageBox.Show($"Želiš li orisati odabrane naloge?"
@@ -162,17 +154,9 @@ namespace PPPK_Proj
 
         private void btnUredi_Click(object sender, EventArgs e)
         {
-            List<int> selektaniPutniNalozi = new List<int>();
+            List<int> selektaniPutniNalozi = SelectPuntiNalozi();
             DialogResult potvrda = DialogResult.Cancel;
-            foreach (DataGridViewRow row in dgPutniNalozi.Rows)
-            {
-                bool isSelected = Convert.ToBoolean(row.Cells[8].Value);
-                if (isSelected == true)
-                {
-                    selektaniPutniNalozi.Add(int.Parse(row.Cells[0].Value.ToString()));
-                }
-            }
-            if (selektaniPutniNalozi.Count ==1)
+            if (selektaniPutniNalozi.Count == 1)
             {
                 PutniNalogForm pn = new PutniNalogForm(this, selektaniPutniNalozi.First());
                 pn.Show();
@@ -197,6 +181,21 @@ namespace PPPK_Proj
                 MessageBox.Show($"Nisi odabrao niti jedan nalog");
             }
         }
+
+        private List<int> SelectPuntiNalozi()
+        {
+            List<int> selektaniPutniNalozi = new List<int>();
+            foreach (DataGridViewRow row in dgPutniNalozi.Rows)
+            {
+                bool isSelected = Convert.ToBoolean(row.Cells[8].Value);
+                if (isSelected == true)
+                {
+                    selektaniPutniNalozi.Add(int.Parse(row.Cells[0].Value.ToString()));
+                }
+            }
+            return selektaniPutniNalozi;
+        }
+
         public void RefreshPN()
         {
             Rifresh();
@@ -213,6 +212,54 @@ namespace PPPK_Proj
         private void dgPutniNalozi_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(e.ToString());
+        }
+
+        private void btnExportXML_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "Export putnog naloga u XML";
+            sfd.Filter = "XML Files|*.xml";
+            sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            DialogResult result = sfd.ShowDialog();
+            List<int> selektaniPutniNalozi = SelectPuntiNalozi();
+            if (selektaniPutniNalozi.Any() && result==DialogResult.OK)
+            {
+                try
+                {
+                    SqlHandler.CreatePutniNaloziXML(selektaniPutniNalozi,sfd.FileName);
+                    MessageBox.Show($"Putni nalozi exportani");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Nisi odabrao niti jedan nalog");
+            }
+        }
+
+        private void btnImportXML_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Import putnog naloga iz XML";
+            ofd.Filter = "XML Files|*.xml";
+            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            DialogResult result = ofd.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                try
+                {
+                    int insertedPN = SqlHandler.ImportPutniNaloziXML(ofd.FileName);
+                    MessageBox.Show($"{insertedPN} putnih naloga importano");
+                    Rifresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }

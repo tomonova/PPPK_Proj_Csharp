@@ -16,6 +16,15 @@ namespace Models
         {
             IDGrad = id;
         }
+
+        public Grad(int iDGrad, string ime, int drzavaID, double latitude, double longitude) : this(iDGrad)
+        {
+            Ime = ime;
+            DrzavaID = drzavaID;
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+
         public int IDGrad { get; set; }
         public string Ime { get; set; }
         public int DrzavaID { get; set; }

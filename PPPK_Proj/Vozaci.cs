@@ -24,14 +24,31 @@ namespace PPPK_Proj
 
         private void popuniVozace()
         {
+            if (!SqlHandler.GetDBStatus())
+            {
+                MessageBox.Show("Ne postoje podatci u bazi, prvo učitajte podatke!!!");
+                DisableSvega();
+                return;
+            }
             try
             {
                 lbVozaci.DataSource = SqlHandler.GetVozaci();
+                EnableSvega();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void DisableSvega()
+        {
+            lbVozaci.DataSource = null;
+            lbVozaci.Items.Clear();
+            btnNoviVozac.Enabled = false;
+            btnObrisi.Enabled = false;
+            btnUrediVozaca.Enabled = false;
+            putniNaloziToolStripMenuItem.Enabled = false;
         }
 
         private void lbVozaci_SelectedIndexChanged(object sender, EventArgs e)
@@ -100,6 +117,76 @@ namespace PPPK_Proj
         {
             PutniNalozi pn = new PutniNalozi();
             pn.Show();
+        }
+
+
+        private void exportPodatakaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                try
+                {
+                    SqlHandler.ExportData(fbd.SelectedPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void importPodatakaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+            if (result == DialogResult.OK && !SqlHandler.GetDBStatus())
+            {
+                try
+                {
+                    if (!SqlHandler.CheckFiles(fbd.SelectedPath))
+                    {
+                        MessageBox.Show($"Nedostaju datoteke za učitavanje");
+                        return;
+                    }
+                    SqlHandler.ImportData(fbd.SelectedPath);
+                    popuniVozace();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void EnableSvega()
+        {
+            btnNoviVozac.Enabled = true;
+            btnObrisi.Enabled = true;
+            btnUrediVozaca.Enabled = true;
+            putniNaloziToolStripMenuItem.Enabled = true;
+        }
+
+        private void brisanjeBazeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var potvrda = MessageBox.Show($"Jesi siguran da želiš obrisati sve podatke?"
+                , "POTVRDI BRISANJE"
+                , MessageBoxButtons.OKCancel
+                , MessageBoxIcon.Exclamation);
+
+            if (potvrda == DialogResult.OK && SqlHandler.GetDBStatus())
+            {
+                try
+                {
+                    SqlHandler.DeletePodataka();
+                    Rifresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }

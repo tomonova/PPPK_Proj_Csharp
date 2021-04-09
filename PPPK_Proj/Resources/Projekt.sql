@@ -65,14 +65,12 @@ create table SERVISNA_KNJIGA
 	constraint PKServisnaKnjiga primary key(IDServis)
 )
 go
-create or alter proc DBCLEAN
-as
-	delete from PUTNI_NALOZI
-	delete from SERVISNA_KNJIGA
-	delete from VOZILA
-	delete from VOZACI
-	delete from GRADOVI
-	delete from DRZAVE
+create table STATUS
+(
+	DBStatus int not null
+)
+insert into STATUS (DBStatus)
+values (1)
 go
 create or alter proc GetVozaci
 as
@@ -132,7 +130,12 @@ as
 go
 create or alter view V_PutniNalozi
 as
-	select pn.IDNalog, pn.Otvaranje as OtvaranjeNaloga,pn.Zatvaranje as ZatvaranjeNaloga,v.Prezime + ' ' + v.Ime as Vozac, vz.Marka +' '+vz.Tip as Vozilo, gs.Ime as MjestoStart, gc.Ime as MjestoCilj,StatusNaloga from PUTNI_NALOZI pn
+	select pn.IDNalog, pn.Otvaranje as OtvaranjeNaloga,
+	pn.Zatvaranje as ZatvaranjeNaloga,
+	v.Prezime + ' ' + v.Ime as Vozac, 
+	vz.Marka +' '+vz.Tip as Vozilo, 
+	gs.Ime as MjestoStart, 
+	gc.Ime as MjestoCilj,StatusNaloga from PUTNI_NALOZI pn
 	left join VOZACI v on v.IDVozac = pn.VozacID
 	left join VOZILA vz on vz.IDVozilo = pn.VoziloID
 	left join GRADOVI gs on gs.IDGrad = pn.MjestoStartID
@@ -280,6 +283,233 @@ AS
 		or (@Otvaranje< Zatvaranje and @Zatvaranje > Zatvaranje)
 	)
 	order by 2 asc
+go
+create or alter proc DropConstraint
+as
+	alter table SERVISNA_KNJIGA
+	drop constraint PKServisnaKnjiga, FKServisnaKnjiga_Vozila;
+	
+	alter table PUTNI_NALOZI
+	drop constraint PKPutniNalozi, FKPutniNalozi_Vozaci,  FKPutniNalozi_Vozila, FKPutniNalozi_MjestoStart, FKPutniNalozi_MjestoCilj;
+
+	alter table GRADOVI
+	drop constraint  PKGradovi, FKGradovi_Drzave;
+	
+	alter table DRZAVE
+	drop constraint PKDrzave;
+
+	alter table VOZILA
+	drop constraint PKVozila;
+	
+	alter table VOZACI
+	drop constraint PKVozaci;
+go
+create or alter proc AddConstraint
+as
+	alter table VOZACI add
+	constraint PKVozaci primary key(IDvozac);
+
+	alter table VOZILA add 
+	constraint PKVozila primary key(IDVozilo);
+
+	alter table DRZAVE add
+	constraint PKDrzave primary key(IDDrzava);
+
+	alter table GRADOVI	add
+	constraint PKGradovi primary key(IDGrad),
+	constraint FKGradovi_Drzave foreign key (DrzavaID) references DRZAVE(IDDrzava);
+
+	alter table PUTNI_NALOZI add
+	constraint PKPutniNalozi primary key(IDNalog),
+	constraint FKPutniNalozi_Vozaci foreign key (VozacID) references VOZACI(IDVozac),
+	constraint FKPutniNalozi_Vozila foreign key (VoziloID) references VOZILA(IDVozilo),
+	constraint FKPutniNalozi_MjestoStart foreign key (MjestoStartID) references GRADOVI(IDGrad),
+	constraint FKPutniNalozi_MjestoCilj foreign key (MjestoCiljID) references GRADOVI(IDGrad);
+	
+	alter table SERVISNA_KNJIGA add
+	constraint PKServisnaKnjiga primary key(IDServis),
+	constraint FKServisnaKnjiga_Vozila foreign key (VoziloID) references VOZILA(IDVozilo);
+go
+create or alter proc DeletePodataka
+as
+	drop table SERVISNA_KNJIGA;	
+	drop table PUTNI_NALOZI;
+	drop table GRADOVI;
+	drop table DRZAVE;
+	drop table VOZILA;
+	drop table VOZACI;
+	update STATUS set DBStatus = 0;
+go
+create or alter proc CreateTables
+as
+create table VOZACI
+(
+	IDVozac int not null identity(1,1),
+	Ime nvarchar(max) not null,
+	Prezime nvarchar(max) not null,
+	Mobitel nvarchar(max) ,
+	VozackaDozvola nvarchar(max) not null,
+	VozacStatus int default(1),
+);
+
+create table VOZILA
+(
+	IDVozilo int not null identity(1,1),
+	Marka nvarchar(max) not null,
+	Tip nvarchar(max) not null,
+	GodinaProizvodnje date not null default (GETDATE()) ,
+	GodinaUnosa date not null default (GETDATE()) ,
+	InicijalniKM int not null default(0),
+);
+create table DRZAVE
+(
+	IDDrzava int not null identity(1,1),
+	Naziv nvarchar(max),
+)
+create table GRADOVI
+(
+	IDGrad int not null identity(1,1),
+	Ime nvarchar(max) not null,
+	Latitutde decimal(9,6) not null,
+	Longitude decimal(9,6) not null,
+	DrzavaID int not null,
+)
+create table PUTNI_NALOZI
+(
+	IDNalog int not null identity(1,1),
+	Otvaranje datetime,
+	Zatvaranje datetime,
+	VozacID int,
+	VoziloID int,
+	MjestoStartID int,
+	MjestoCiljID int,
+	StatusNaloga int,
+)
+create table SERVISNA_KNJIGA
+(
+	IDServis int not null identity(1,1),
+	VoziloID int,
+	Datum date not null,
+	Trosak decimal(10,2) not null default(0)
+)
+go
+create or alter proc InitinsertDrzave
+	@IDDrzava int,
+	@Naziv nvarchar(max)
+as
+	set IDENTITY_INSERT DRZAVE ON
+	insert into DRZAVE(IDDrzava, Naziv)
+	values(@IDDrzava,@Naziv)
+	set IDENTITY_INSERT DRZAVE OFF
+go
+create or alter proc InitinsertGradovi
+	@IDgrad int,
+	@Ime nvarchar(max),
+	@Latitude decimal(9,6),
+	@Longitude decimal(9,6),
+	@DrzavaId int
+as
+	set IDENTITY_INSERT GRADOVI ON
+	insert into GRADOVI(IDGrad, Ime, Latitutde, Longitude, DrzavaID)
+	values(@IDgrad,@Ime,@Latitude,@Longitude,@DrzavaId)
+	set IDENTITY_INSERT GRADOVI OFF
+go
+create or alter proc InitinsertVozila
+	@IDVozilo int,
+	@Marka nvarchar(max),
+	@Tip nvarchar(max),
+	@GodinaProizvodnje date,
+	@GodinaUnosa date,
+	@InicijalniKM int
+as
+	set IDENTITY_INSERT VOZILA ON
+	insert into VOZILA(IDVozilo, Marka, Tip, GodinaProizvodnje, GodinaUnosa,InicijalniKM)
+	values(@IDVozilo,@Marka,@Tip, @GodinaProizvodnje,@GodinaUnosa,@InicijalniKM)
+	set IDENTITY_INSERT VOZILA OFF
+go
+create or alter proc InitinsertVozaca
+	@IDVozac int,
+	@Ime nvarchar(max),
+	@Prezime nvarchar(max),
+	@Mobitel nvarchar(max),
+	@VozackaDozvola nvarchar(max),
+	@VozacStatus int
+as
+	set IDENTITY_INSERT VOZACI ON
+	insert into VOZACI(IDVozac, Ime, Prezime, Mobitel, VozackaDozvola,VozacStatus)
+	values(@IDVozac,@Ime,@Prezime, @Mobitel,@VozackaDozvola,@VozacStatus)
+	set IDENTITY_INSERT VOZACI OFF
+go
+create or alter proc InitinsertServisnaKnjiga
+	@IDServis int,
+	@VoziloID int,
+	@Datum date,
+	@Trosak decimal(10,2)
+as
+	set IDENTITY_INSERT SERVISNA_KNJIGA ON
+	insert into SERVISNA_KNJIGA(IDServis, VoziloID, Datum, Trosak)
+	values(@IDServis,@VoziloID,@Datum, @Trosak)
+	set IDENTITY_INSERT SERVISNA_KNJIGA OFF
+go
+create or alter proc InitinsertPutniNalozi
+	@IDNalog int,
+	@Otvaranje datetime,
+	@Zatvaranje datetime,
+	@VozacID int,
+	@VoziloID int,
+	@MjestoStartID int,
+	@MjestoCiljID int,
+	@StatusNaloga int
+as
+	set IDENTITY_INSERT PUTNI_NALOZI ON
+	insert into PUTNI_NALOZI(IDNalog,Otvaranje,Zatvaranje, VozacID,VoziloID,MjestoStartID,MjestoCiljID,StatusNaloga)
+	values(@IDNalog,@Otvaranje,@Zatvaranje, @VozacID,@VoziloID,@MjestoStartID,@MjestoCiljID,@StatusNaloga)
+	set IDENTITY_INSERT PUTNI_NALOZI OFF
+go
+create or alter proc GetDBStatus
+as
+	select DBStatus from STATUS
+go
+create or alter proc SetDBStatus
+	@DBStatus int
+as 
+update STATUS
+set DBStatus = @DBStatus
+go
+create or alter proc ExportData
+as
+	select * from SERVISNA_KNJIGA
+	select * from PUTNI_NALOZI
+	select * from GRADOVI
+	select * from DRZAVE
+	select * from VOZACI
+	select * from VOZILA
+go
+create or alter proc CreatePNDataSet
+	@PNList varchar(max)
+as
+declare @SQLPN varchar(max) = 'SELECT * FROM PUTNI_NALOZI WHERE IDNalog IN ('+@PNList+')'
+declare @SQLGRADOVI varchar(max) = 'select * from GRADOVI where IDGrad in 
+	(Select MjestoStartID from PUTNI_NALOZI where IDNalog in ('+@PNList+') 
+	union Select MjestoCiljID from PUTNI_NALOZI where IDNalog in ('+@PNList+'))'
+declare @SQLVOZACI varchar(max)='select * from VOZACI where IDVozac in (Select VozacID from PUTNI_NALOZI where IDNalog in ('+@PNList+'))'
+declare @SQLVOZILA varchar(max)='select * from VOZILA where IDVozilo in (Select VoziloID from PUTNI_NALOZI where IDNalog in ('+@PNList+'))'
+exec (@SQLPN)
+exec (@SQLGRADOVI)
+exec (@SQLVOZACI)
+exec (@SQLVOZILA)
+go
+create or alter proc InsertPutniNalog
+	@Otvaranje datetime,
+	@Zatvaranje datetime,
+	@VozacID int,
+	@VoziloID int,
+	@MjestoStartID int,
+	@MjestoCiljID int,
+	@StatusNaloga int
+as
+	insert into PUTNI_NALOZI(Otvaranje,Zatvaranje, VozacID,VoziloID,MjestoStartID,MjestoCiljID,StatusNaloga)
+	values(@Otvaranje,@Zatvaranje, @VozacID,@VoziloID,@MjestoStartID,@MjestoCiljID,@StatusNaloga)
 go
 create or alter proc DBINIT
 as
