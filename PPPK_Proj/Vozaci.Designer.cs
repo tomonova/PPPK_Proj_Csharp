@@ -42,11 +42,12 @@
             this.tbIme = new System.Windows.Forms.TextBox();
             this.btnObrisi = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.putniNaloziToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.podaciToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportPodatakaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.brisanjeBazeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importPodatakaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.putniNaloziToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.servisiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -205,19 +206,13 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.podaciToolStripMenuItem,
-            this.putniNaloziToolStripMenuItem});
+            this.putniNaloziToolStripMenuItem,
+            this.servisiToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(726, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // putniNaloziToolStripMenuItem
-            // 
-            this.putniNaloziToolStripMenuItem.Name = "putniNaloziToolStripMenuItem";
-            this.putniNaloziToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
-            this.putniNaloziToolStripMenuItem.Text = "Putni nalozi";
-            this.putniNaloziToolStripMenuItem.Click += new System.EventHandler(this.putniNaloziToolStripMenuItem_Click);
             // 
             // podaciToolStripMenuItem
             // 
@@ -232,23 +227,37 @@
             // exportPodatakaToolStripMenuItem
             // 
             this.exportPodatakaToolStripMenuItem.Name = "exportPodatakaToolStripMenuItem";
-            this.exportPodatakaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportPodatakaToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.exportPodatakaToolStripMenuItem.Text = "Export podataka";
             this.exportPodatakaToolStripMenuItem.Click += new System.EventHandler(this.exportPodatakaToolStripMenuItem_Click);
             // 
             // brisanjeBazeToolStripMenuItem
             // 
             this.brisanjeBazeToolStripMenuItem.Name = "brisanjeBazeToolStripMenuItem";
-            this.brisanjeBazeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.brisanjeBazeToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.brisanjeBazeToolStripMenuItem.Text = "Brisanje Podataka";
             this.brisanjeBazeToolStripMenuItem.Click += new System.EventHandler(this.brisanjeBazeToolStripMenuItem_Click);
             // 
             // importPodatakaToolStripMenuItem
             // 
             this.importPodatakaToolStripMenuItem.Name = "importPodatakaToolStripMenuItem";
-            this.importPodatakaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importPodatakaToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.importPodatakaToolStripMenuItem.Text = "Import Podataka";
             this.importPodatakaToolStripMenuItem.Click += new System.EventHandler(this.importPodatakaToolStripMenuItem_Click);
+            // 
+            // putniNaloziToolStripMenuItem
+            // 
+            this.putniNaloziToolStripMenuItem.Name = "putniNaloziToolStripMenuItem";
+            this.putniNaloziToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.putniNaloziToolStripMenuItem.Text = "Putni nalozi";
+            this.putniNaloziToolStripMenuItem.Click += new System.EventHandler(this.putniNaloziToolStripMenuItem_Click);
+            // 
+            // servisiToolStripMenuItem
+            // 
+            this.servisiToolStripMenuItem.Name = "servisiToolStripMenuItem";
+            this.servisiToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.servisiToolStripMenuItem.Text = "Servisi";
+            this.servisiToolStripMenuItem.Click += new System.EventHandler(this.servisiToolStripMenuItem_Click);
             // 
             // Vozaci
             // 
@@ -296,5 +305,6 @@
         private System.Windows.Forms.ToolStripMenuItem exportPodatakaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem brisanjeBazeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importPodatakaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem servisiToolStripMenuItem;
     }
 }

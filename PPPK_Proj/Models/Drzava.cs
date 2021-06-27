@@ -16,5 +16,7 @@ namespace Models
 
         public int ID { get; set; }
         public string Ime { get; set; }
+        public override bool Equals(object obj) => obj is Drzava other ? ID == other.ID : false;
+        public override int GetHashCode() => ID.GetHashCode();
     }
 }

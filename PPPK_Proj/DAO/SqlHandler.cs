@@ -675,5 +675,12 @@ namespace PPPK_Proj.DAO
                 throw ex;
             }
         }
+        internal static List<SERVISNA_KNJIGA> GetServisi()
+        {
+            using (var db = new ModelContainer())
+            {
+                return db.SERVISNA_KNJIGA.OrderByDescending(x => x.Datum).ToList();
+            }
+        }
     }
 }

@@ -188,5 +188,11 @@ namespace PPPK_Proj
                 }
             }
         }
+
+        private void servisiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Servisi s = new Servisi();
+            s.Show();
+        }
     }
 }

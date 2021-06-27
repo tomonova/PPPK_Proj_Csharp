@@ -33,5 +33,7 @@ namespace Models
         public DateTime GodinaUnosa { get; set; }
         public int InicijalniKM { get; set; }
         public override string ToString() => $"{Marka} {Tip}";
+        public override bool Equals(object obj) => obj is Vozilo other ? IDVozilo == other.IDVozilo : false;
+        public override int GetHashCode() => IDVozilo.GetHashCode();
     }
 }

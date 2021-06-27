@@ -20,5 +20,8 @@ namespace Models
         public Vozilo Vozilo { get; set; }
         public DateTime DatumServisa { get; set; }
         public decimal Trosak { get; set; }
+
+        public override bool Equals(object obj) => obj is Servis other ? ID == other.ID : false;
+        public override int GetHashCode() => ID.GetHashCode();
     }
 }

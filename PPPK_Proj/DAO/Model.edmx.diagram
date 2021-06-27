@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7bb38be7912e4ab29e2d58797ee48c5c" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.DRZAVE" Width="1.5" PointX="1.5" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.GRADOVI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PUTNI_NALOZI" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SERVIS_STAVKE" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SERVISI" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SERVISNA_KNJIGA" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.sysdiagrams" Width="1.5" PointX="5.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VOZACI" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.VOZILA" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.STATUS" Width="1.5" PointX="5.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.V_PutniNalozi" Width="1.5" PointX="7.75" PointY="2.125" IsExpanded="true" />
+        <AssociationConnector Association="Model.FKGradovi_Drzave" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKPutniNalozi_MjestoCilj" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKPutniNalozi_MjestoStart" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKPutniNalozi_Vozaci" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKPutniNalozi_Vozila" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKServis_Stavka" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKServis_ServisnaKnjiga" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FKServisnaKnjiga_Vozila" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

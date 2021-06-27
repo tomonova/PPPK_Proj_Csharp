@@ -31,5 +31,7 @@ namespace Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public override string ToString() => $"Ime";
+        public override bool Equals(object obj) => obj is Grad other ? IDGrad == other.IDGrad : false;
+        public override int GetHashCode() => IDGrad.GetHashCode();
     }
 }

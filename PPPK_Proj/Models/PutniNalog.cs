@@ -34,5 +34,7 @@ namespace Models
         public Grad Start { get; set; }
         public Grad Cilj { get; set; }
         public PutniNalogStatus NalogStatus { get; set; }
+        public override bool Equals(object obj) => obj is PutniNalog other ? IDPutniNalog == other.IDPutniNalog : false;
+        public override int GetHashCode() => IDPutniNalog.GetHashCode();
     }
 }

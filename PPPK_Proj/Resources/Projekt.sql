@@ -10,7 +10,7 @@ create table VOZACI
 	Mobitel nvarchar(max) ,
 	VozackaDozvola nvarchar(max) not null,
 	VozacStatus int default(1),
-	constraint PKVozaci primary key(IDvozac),
+	constraint PKVozaci primary key(IDvozac)
 );
 
 create table VOZILA
@@ -63,6 +63,24 @@ create table SERVISNA_KNJIGA
 	Datum date not null,
 	Trosak decimal(10,2) not null default(0)
 	constraint PKServisnaKnjiga primary key(IDServis)
+)
+go
+create table SERVIS_STAVKE
+(
+	IDStavka int not null identity(1,1),
+	Naziv nvarchar(max) not null,
+	Cijena decimal(10,2) not null default(0)
+	constraint PKStavke primary key(IDStavka)
+)
+
+create table SERVISI
+(
+	IDServisStavka int not null identity(1,1),
+	ServisID int not null,
+	StavkaID int not null,
+	constraint FKServis_ServisnaKnjiga foreign key (ServisID) references SERVISNA_KNJIGA(IDServis),
+	constraint FKServis_Stavka foreign key (StavkaID) references SERVIS_STAVKE(IDStavka),
+	constraint PKServisi primary key(IDServisStavka)
 )
 go
 create table STATUS

@@ -29,5 +29,7 @@ namespace Models
         public string Mobitel { get; set; }
         public string VozackaDozvola { get; set; }
         public override string ToString() => $"{Ime} {Prezime}";
+        public override bool Equals(object obj) => obj is Vozac other ? IDVozac == other.IDVozac : false;
+        public override int GetHashCode() => IDVozac.GetHashCode();
     }
 }
