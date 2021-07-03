@@ -87,9 +87,9 @@ namespace PPPK_Proj
         private void btnObrisi_Click(object sender, EventArgs e)
         {
             var potvrda = MessageBox.Show($"Jesi siguran da daješ otkaz {lbVozaci.SelectedItem}?"
-                ,"POTVRDI BRISANJE"
-                ,MessageBoxButtons.OKCancel
-                ,MessageBoxIcon.Warning);
+                , "POTVRDI BRISANJE"
+                , MessageBoxButtons.OKCancel
+                , MessageBoxIcon.Warning);
             if (lbVozaci.SelectedItem is Vozac vozac)
             {
                 if (potvrda == DialogResult.OK)

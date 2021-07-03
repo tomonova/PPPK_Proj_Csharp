@@ -140,6 +140,7 @@ namespace PPPK_Proj
             this.btnNew.TabIndex = 11;
             this.btnNew.Text = "NOVI SERVIS";
             this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
             // btnUpdate
             // 
@@ -150,6 +151,7 @@ namespace PPPK_Proj
             this.btnUpdate.TabIndex = 12;
             this.btnUpdate.Text = "UREDI SERVIS";
             this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnDelete
             // 
@@ -162,6 +164,7 @@ namespace PPPK_Proj
             this.btnDelete.TabIndex = 13;
             this.btnDelete.Text = "OBRIŠI SERVIS";
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // Servisi
             // 
@@ -181,6 +184,7 @@ namespace PPPK_Proj
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbServisi);
             this.Name = "Servisi";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Servisi";
             this.Load += new System.EventHandler(this.Servisi_Load);
             this.ResumeLayout(false);

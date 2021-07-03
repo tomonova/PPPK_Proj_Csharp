@@ -20,5 +20,6 @@ namespace PPPK_Proj.DAO
     
         public virtual SERVIS_STAVKE SERVIS_STAVKE { get; set; }
         public virtual SERVISNA_KNJIGA SERVISNA_KNJIGA { get; set; }
+        public override string ToString() => $"Stavka: {SERVIS_STAVKE.Naziv} ; Cijena: {SERVIS_STAVKE.Cijena}";
     }
 }

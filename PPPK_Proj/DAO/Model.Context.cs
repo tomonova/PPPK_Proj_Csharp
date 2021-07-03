@@ -20,6 +20,7 @@ namespace PPPK_Proj.DAO
         public ModelContainer()
             : base("name=ModelContainer")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -27,17 +28,17 @@ namespace PPPK_Proj.DAO
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<DRZAVE> DRZAVE { get; set; }
-        public virtual DbSet<GRADOVI> GRADOVI { get; set; }
-        public virtual DbSet<PUTNI_NALOZI> PUTNI_NALOZI { get; set; }
-        public virtual DbSet<SERVIS_STAVKE> SERVIS_STAVKE { get; set; }
-        public virtual DbSet<SERVISI> SERVISI { get; set; }
-        public virtual DbSet<SERVISNA_KNJIGA> SERVISNA_KNJIGA { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<VOZACI> VOZACI { get; set; }
-        public virtual DbSet<VOZILA> VOZILA { get; set; }
-        public virtual DbSet<STATUS> STATUS { get; set; }
-        public virtual DbSet<V_PutniNalozi> V_PutniNalozi { get; set; }
+        public  DbSet<DRZAVE> DRZAVE { get; set; }
+        public  DbSet<GRADOVI> GRADOVI { get; set; }
+        public  DbSet<PUTNI_NALOZI> PUTNI_NALOZI { get; set; }
+        public  DbSet<SERVIS_STAVKE> SERVIS_STAVKE { get; set; }
+        public  DbSet<SERVISI> SERVISI { get; set; }
+        public  DbSet<SERVISNA_KNJIGA> SERVISNA_KNJIGA { get; set; }
+        public  DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public  DbSet<VOZACI> VOZACI { get; set; }
+        public  DbSet<VOZILA> VOZILA { get; set; }
+        public  DbSet<STATUS> STATUS { get; set; }
+        public  DbSet<V_PutniNalozi> V_PutniNalozi { get; set; }
     
         public virtual int AddConstraint()
         {

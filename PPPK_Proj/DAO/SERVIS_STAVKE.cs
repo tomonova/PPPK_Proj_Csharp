@@ -26,5 +26,7 @@ namespace PPPK_Proj.DAO
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SERVISI> SERVISI { get; set; }
+
+        public override string ToString() => $"{Naziv}: {Cijena} kn";
     }
 }

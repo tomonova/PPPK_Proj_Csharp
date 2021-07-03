@@ -307,6 +307,9 @@ as
 	alter table SERVISNA_KNJIGA
 	drop constraint PKServisnaKnjiga, FKServisnaKnjiga_Vozila;
 	
+	alter table SERVISI
+	drop constraint PKServisi,FKServis_ServisnaKnjiga,FKServis_Stavka;
+	
 	alter table PUTNI_NALOZI
 	drop constraint PKPutniNalozi, FKPutniNalozi_Vozaci,  FKPutniNalozi_Vozila, FKPutniNalozi_MjestoStart, FKPutniNalozi_MjestoCilj;
 
@@ -347,13 +350,24 @@ as
 	alter table SERVISNA_KNJIGA add
 	constraint PKServisnaKnjiga primary key(IDServis),
 	constraint FKServisnaKnjiga_Vozila foreign key (VoziloID) references VOZILA(IDVozilo);
+
+	alter table SERVIS_STAVKE add
+	constraint PKStavke primary key(IDStavka)
+
+	alter table SERVISI add
+	constraint FKServis_ServisnaKnjiga foreign key (ServisID) references SERVISNA_KNJIGA(IDServis),
+	constraint FKServis_Stavka foreign key (StavkaID) references SERVIS_STAVKE(IDStavka),
+	constraint PKServisi primary key(IDServisStavka)
+
 go
 create or alter proc DeletePodataka
 as
-	drop table SERVISNA_KNJIGA;	
 	drop table PUTNI_NALOZI;
 	drop table GRADOVI;
 	drop table DRZAVE;
+	drop table SERVISI;
+	drop table SERVIS_STAVKE;
+	drop table SERVISNA_KNJIGA;	
 	drop table VOZILA;
 	drop table VOZACI;
 	update STATUS set DBStatus = 0;
@@ -409,6 +423,19 @@ create table SERVISNA_KNJIGA
 	VoziloID int,
 	Datum date not null,
 	Trosak decimal(10,2) not null default(0)
+)
+create table SERVIS_STAVKE
+(
+	IDStavka int not null identity(1,1),
+	Naziv nvarchar(max) not null,
+	Cijena decimal(10,2) not null default(0)
+)
+
+create table SERVISI
+(
+	IDServisStavka int not null identity(1,1),
+	ServisID int not null,
+	StavkaID int not null
 )
 go
 create or alter proc InitinsertDrzave
@@ -484,6 +511,26 @@ as
 	values(@IDNalog,@Otvaranje,@Zatvaranje, @VozacID,@VoziloID,@MjestoStartID,@MjestoCiljID,@StatusNaloga)
 	set IDENTITY_INSERT PUTNI_NALOZI OFF
 go
+create or alter proc InitinsertServisi
+	@IDServisStavka int,
+	@ServisID int,
+	@StavkaID int
+as
+	set IDENTITY_INSERT SERVISI ON
+	insert into SERVISI(IDServisStavka, ServisID, StavkaID)
+	values(@IDServisStavka, @ServisID, @StavkaID)
+	set IDENTITY_INSERT SERVISI OFF
+go
+create or alter proc InitinsertStavke
+	@IDStavka int,
+	@Naziv nvarchar(max),
+	@Cijena decimal(10,2)
+as
+	set IDENTITY_INSERT SERVIS_STAVKE ON
+	insert into SERVIS_STAVKE(IDStavka, Naziv, Cijena)
+	values(@IDStavka, @Naziv, @Cijena)
+	set IDENTITY_INSERT SERVIS_STAVKE OFF
+go
 create or alter proc GetDBStatus
 as
 	select DBStatus from STATUS
@@ -502,6 +549,8 @@ as
 	select * from DRZAVE
 	select * from VOZACI
 	select * from VOZILA
+	select * from SERVISI
+	select * from SERVIS_STAVKE
 go
 create or alter proc CreatePNDataSet
 	@PNList varchar(max)

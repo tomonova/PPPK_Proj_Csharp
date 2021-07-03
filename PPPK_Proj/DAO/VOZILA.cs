@@ -32,5 +32,6 @@ namespace PPPK_Proj.DAO
         public virtual ICollection<PUTNI_NALOZI> PUTNI_NALOZI { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SERVISNA_KNJIGA> SERVISNA_KNJIGA { get; set; }
+        public override string ToString() => $"{Marka} {Tip}";
     }
 }

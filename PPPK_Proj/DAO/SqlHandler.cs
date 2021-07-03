@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PPPK_Proj.DAO
@@ -35,7 +35,8 @@ namespace PPPK_Proj.DAO
         private const string TIP_VREMENA = "@TipVremena";
         private const string dateTimeFormat = "yyyy-MM-dd HH:mm";
         private const string emptyDate = "0001-01-01 00:00";
-        private static readonly string[] TABLICE = { "SERVISNA_KNJIGA", "PUTNI_NALOZI", "GRADOVI", "DRZAVE", "VOZACI", "VOZILA" };
+
+        private static readonly string[] TABLICE = { "SERVISNA_KNJIGA", "PUTNI_NALOZI", "GRADOVI", "DRZAVE", "VOZACI", "VOZILA","SERVISI","SERVIS_STAVKE" };
 
         internal static List<Vozac> GetVozaci()
         {
@@ -66,6 +67,7 @@ namespace PPPK_Proj.DAO
             }
             return vozaci;
         }
+
 
         internal static string GetTime(int iDNalog, string tipVremena)
         {
@@ -143,6 +145,24 @@ namespace PPPK_Proj.DAO
             InitinsertDrzave(ds.Tables[TABLICE[3]]);
             InitinsertVozaca(ds.Tables[TABLICE[4]]);
             InitinsertVozila(ds.Tables[TABLICE[5]]);
+            InitinsertServisi(ds.Tables[TABLICE[6]]);
+            InitinsertStavke(ds.Tables[TABLICE[7]]);
+        }
+
+        private static void InitinsertStavke(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1], row[2]);
+            }
+        }
+
+        private static void InitinsertServisi(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[0], row[1], row[2]);
+            }
         }
 
         private static void InitinsertServisnaKnjiga(DataTable dataTable)
@@ -289,7 +309,7 @@ namespace PPPK_Proj.DAO
             int insertedNum = 0;
             foreach (DataRow row in dataTable.Rows)
             {
-                 insertedNum += db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+                insertedNum += db.ExecuteNonQuery(MethodBase.GetCurrentMethod().Name, row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
             }
             return insertedNum;
         }
@@ -679,7 +699,124 @@ namespace PPPK_Proj.DAO
         {
             using (var db = new ModelContainer())
             {
-                return db.SERVISNA_KNJIGA.OrderByDescending(x => x.Datum).ToList();
+                return db.SERVISNA_KNJIGA
+                    .Include(e => e.VOZILA)
+                    .Include(e => e.SERVISI)
+                    .ToList();
+            }
+        }
+        internal static SERVISNA_KNJIGA GetServis(int iDServis)
+        {
+            using (var db = new ModelContainer())
+            {
+                return db.SERVISNA_KNJIGA
+                    .Include(e => e.VOZILA)
+                    .Include(e => e.SERVISI.Select(s => s.SERVIS_STAVKE))
+                    .FirstOrDefault(e => e.IDServis == iDServis);
+            }
+        }
+
+        internal static List<SERVISI> GetStavke(int iDServis)
+        {
+            using (var db = new ModelContainer())
+            {
+                return db.SERVISI
+                    .Include(s => s.SERVIS_STAVKE)
+                    .Where(s => s.ServisID == iDServis)
+                    .ToList();
+            }
+        }
+
+        internal static bool DelServis(SERVISNA_KNJIGA servis)
+        {
+            List<SERVISI> ServisStavke = new List<SERVISI>();
+            using (var db = new ModelContainer())
+            {
+                ServisStavke = db.SERVISI.Where(s => s.ServisID == servis.IDServis).ToList();
+            }
+            ObrisiServisStavke(ServisStavke);
+            ObrisiServis(servis);
+
+            return true;
+        }
+
+        private static void ObrisiServis(SERVISNA_KNJIGA servis)
+        {
+            using (var db = new ModelContainer())
+            {
+                servis.SERVISI = null;
+                db.SERVISNA_KNJIGA.Attach(servis);
+                db.SERVISNA_KNJIGA.Remove(servis);
+                db.SaveChanges();
+            }
+        }
+
+        private static void ObrisiServisStavke(List<SERVISI> servisStavke)
+        {
+            using (var db = new ModelContainer())
+            {
+                foreach (var item in servisStavke)
+                {
+                    db.SERVISI.Attach(item);
+                    db.SERVISI.Remove(item);
+                }
+                db.SaveChanges();
+            }
+        }
+
+        internal static List<SERVIS_STAVKE> GetServisneStavke(int servisID)
+        {
+            List<SERVIS_STAVKE> stavke = new List<SERVIS_STAVKE>();
+
+            using (var db = new ModelContainer())
+            {
+                if (servisID == 0)
+                {
+                    stavke = db.SERVIS_STAVKE.ToList();
+                }
+
+                return stavke;
+            }
+        }
+
+        internal static object GetVozila(int voziloID)
+        {
+            List<VOZILA> vozila = new List<VOZILA>();
+            using (var db = new ModelContainer())
+            {
+                if (voziloID == 0)
+                {
+                    vozila = db.VOZILA.ToList();
+                }
+                return vozila;
+            }
+        }
+        internal static void ManageServisa(SERVISNA_KNJIGA servis)
+        {
+            using (var db = new ModelContainer())
+            {
+                if (servis.IDServis == 0)
+                {
+                    db.SERVISNA_KNJIGA.Add(servis);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    List<SERVISI> servis4Brisanje = db.SERVISI.Where(s => s.ServisID == servis.IDServis).ToList();
+                    foreach (var item in servis4Brisanje)
+                    {
+                        db.SERVISI.Attach(item);
+                        db.SERVISI.Remove(item);
+                        db.SaveChanges();
+                    }
+
+                    foreach (var item in servis.SERVISI)
+                    {
+                        db.SERVISI.AddOrUpdate(item);
+                    }
+                    db.SERVISNA_KNJIGA.AddOrUpdate(servis);
+                    db.SaveChanges();
+                }
             }
         }
     }
