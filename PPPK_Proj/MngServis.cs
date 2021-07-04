@@ -90,7 +90,7 @@ namespace PPPK_Proj
             {
                 MessageBox.Show(ex.Message);
             }
-            if (servisna_knjiga!=null)
+            if (servisna_knjiga.VOZILA!=null)
             {
                 int index = 0;
                 string ime_auta = servisna_knjiga.VOZILA.ToString();
