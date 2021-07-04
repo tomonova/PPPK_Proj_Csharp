@@ -41,6 +41,7 @@ namespace PPPK_Proj
             this.btnNew = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.btnHtml = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbServisi
@@ -136,7 +137,7 @@ namespace PPPK_Proj
             this.btnNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btnNew.Location = new System.Drawing.Point(12, 458);
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(151, 49);
+            this.btnNew.Size = new System.Drawing.Size(120, 49);
             this.btnNew.TabIndex = 11;
             this.btnNew.Text = "NOVI SERVIS";
             this.btnNew.UseVisualStyleBackColor = true;
@@ -145,9 +146,9 @@ namespace PPPK_Proj
             // btnUpdate
             // 
             this.btnUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnUpdate.Location = new System.Drawing.Point(169, 458);
+            this.btnUpdate.Location = new System.Drawing.Point(138, 458);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(151, 49);
+            this.btnUpdate.Size = new System.Drawing.Size(122, 49);
             this.btnUpdate.TabIndex = 12;
             this.btnUpdate.Text = "UREDI SERVIS";
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -166,11 +167,23 @@ namespace PPPK_Proj
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // btnHtml
+            // 
+            this.btnHtml.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnHtml.Location = new System.Drawing.Point(298, 458);
+            this.btnHtml.Name = "btnHtml";
+            this.btnHtml.Size = new System.Drawing.Size(122, 49);
+            this.btnHtml.TabIndex = 14;
+            this.btnHtml.Text = "HTML VIEW";
+            this.btnHtml.UseVisualStyleBackColor = true;
+            this.btnHtml.Click += new System.EventHandler(this.btnHtml_Click);
+            // 
             // Servisi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(589, 519);
+            this.Controls.Add(this.btnHtml);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnNew);
@@ -206,5 +219,6 @@ namespace PPPK_Proj
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnHtml;
     }
 }

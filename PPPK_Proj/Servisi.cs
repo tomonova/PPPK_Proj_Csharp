@@ -65,7 +65,7 @@ namespace PPPK_Proj
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            var potvrda = MessageBox.Show($"Jesi siguran da brišeš Servis?{lbServisi.SelectedItem}?"
+            var potvrda = MessageBox.Show($"Jesi siguran da brišeš Servis {lbServisi.SelectedItem}?"
                 , "POTVRDI BRISANJE"
                 , MessageBoxButtons.OKCancel
                 , MessageBoxIcon.Warning);
@@ -81,7 +81,7 @@ namespace PPPK_Proj
                         }
                         else
                         {
-                            MessageBox.Show("Nismo ga mogli otpustiti, sindikat garant");
+                            MessageBox.Show("Nismo mogli obrisati servis" );
                         }
                     }
                     catch (Exception ex)
@@ -111,6 +111,16 @@ namespace PPPK_Proj
                 new MngServis(servis.IDServis).ShowDialog();
             }
             Rifresh();
+        }
+
+        private void btnHtml_Click(object sender, EventArgs e)
+        {
+            if (lbServisi.SelectedItem is SERVISNA_KNJIGA servis)
+            {
+                HTMLViewer htmlViewer = new HTMLViewer(servis);
+                htmlViewer.Text = $"Servis na datum: {servis.Datum.ToString("dd/MM/yyyy")}";
+                htmlViewer.Show();
+            }
         }
     }
 }

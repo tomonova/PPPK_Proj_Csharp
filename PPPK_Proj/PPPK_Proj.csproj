@@ -174,6 +174,12 @@
     <Compile Include="DodajUrediVozac.Designer.cs">
       <DependentUpon>DodajUrediVozac.cs</DependentUpon>
     </Compile>
+    <Compile Include="HTMLViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HTMLViewer.Designer.cs">
+      <DependentUpon>HTMLViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MngServis.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +226,9 @@
     </Compile>
     <EmbeddedResource Include="DodajUrediVozac.resx">
       <DependentUpon>DodajUrediVozac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HTMLViewer.resx">
+      <DependentUpon>HTMLViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MngServis.resx">
       <DependentUpon>MngServis.cs</DependentUpon>
