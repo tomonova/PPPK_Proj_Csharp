@@ -299,7 +299,7 @@ AS
 		where (@Zatvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
 		or (@Otvaranje > Otvaranje and @Zatvaranje < Zatvaranje)
 		or (@Otvaranje< Zatvaranje and @Zatvaranje > Zatvaranje)
-	)
+	)and VozacStatus=1
 	order by 2 asc
 go
 create or alter proc DropConstraint

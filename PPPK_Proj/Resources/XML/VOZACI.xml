@@ -1,0 +1,87 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="VOZACI" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="VOZACI">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDVozac" type="xs:int" minOccurs="0" />
+                <xs:element name="Ime" type="xs:string" minOccurs="0" />
+                <xs:element name="Prezime" type="xs:string" minOccurs="0" />
+                <xs:element name="Mobitel" type="xs:string" minOccurs="0" />
+                <xs:element name="VozackaDozvola" type="xs:string" minOccurs="0" />
+                <xs:element name="VozacStatus" type="xs:int" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <VOZACI>
+    <IDVozac>1</IDVozac>
+    <Ime>Pijani</Ime>
+    <Prezime>Vlado</Prezime>
+    <Mobitel>091666666</Mobitel>
+    <VozackaDozvola>VD01237542</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>2</IDVozac>
+    <Ime>Crna</Ime>
+    <Prezime>Guja</Prezime>
+    <Mobitel>099123654</Mobitel>
+    <VozackaDozvola>sfdgsdfg</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>3</IDVozac>
+    <Ime>Ivo</Ime>
+    <Prezime>Osudjeni</Prezime>
+    <Mobitel>098534587</Mobitel>
+    <VozackaDozvola>VD29875234</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>4</IDVozac>
+    <Ime>Zdravkec</Ime>
+    <Prezime>Maminjo</Prezime>
+    <Mobitel>+387096543201</Mobitel>
+    <VozackaDozvola>VD98754245</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>5</IDVozac>
+    <Ime>Gazmir</Ime>
+    <Prezime>Čačić</Prezime>
+    <Mobitel>091976763</Mobitel>
+    <VozackaDozvola>LOL</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>6</IDVozac>
+    <Ime>Ljubo</Ime>
+    <Prezime>Česić Rojs</Prezime>
+    <Mobitel>0991234567</Mobitel>
+    <VozackaDozvola>VD12345689</VozackaDozvola>
+    <VozacStatus>2</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>7</IDVozac>
+    <Ime>Ivić</Ime>
+    <Prezime>Pašalić</Prezime>
+    <Mobitel>0992345176</Mobitel>
+    <VozackaDozvola>VD12354</VozackaDozvola>
+    <VozacStatus>1</VozacStatus>
+  </VOZACI>
+  <VOZACI>
+    <IDVozac>8</IDVozac>
+    <Ime>testni</Ime>
+    <Prezime>testić</Prezime>
+    <Mobitel>09987654321</Mobitel>
+    <VozackaDozvola>VD091234</VozackaDozvola>
+    <VozacStatus>2</VozacStatus>
+  </VOZACI>
+</SviPodaci>

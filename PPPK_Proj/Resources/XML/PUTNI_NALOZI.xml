@@ -1,0 +1,115 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="PUTNI_NALOZI" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="PUTNI_NALOZI">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDNalog" type="xs:int" minOccurs="0" />
+                <xs:element name="Otvaranje" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="Zatvaranje" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="VozacID" type="xs:int" minOccurs="0" />
+                <xs:element name="VoziloID" type="xs:int" minOccurs="0" />
+                <xs:element name="MjestoStartID" type="xs:int" minOccurs="0" />
+                <xs:element name="MjestoCiljID" type="xs:int" minOccurs="0" />
+                <xs:element name="StatusNaloga" type="xs:int" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <PUTNI_NALOZI>
+    <IDNalog>2</IDNalog>
+    <Otvaranje>2020-11-02T17:52:00+01:00</Otvaranje>
+    <Zatvaranje>2020-11-18T17:52:00+01:00</Zatvaranje>
+    <VozacID>5</VozacID>
+    <VoziloID>2</VoziloID>
+    <MjestoStartID>358</MjestoStartID>
+    <MjestoCiljID>106</MjestoCiljID>
+    <StatusNaloga>2</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>3</IDNalog>
+    <Otvaranje>2020-11-01T17:52:00+01:00</Otvaranje>
+    <Zatvaranje>2020-12-04T17:52:00+01:00</Zatvaranje>
+    <VozacID>2</VozacID>
+    <VoziloID>3</VoziloID>
+    <MjestoStartID>459</MjestoStartID>
+    <MjestoCiljID>51</MjestoCiljID>
+    <StatusNaloga>3</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>4</IDNalog>
+    <Otvaranje>2020-03-03T17:53:00+01:00</Otvaranje>
+    <Zatvaranje>2020-03-11T17:53:00+01:00</Zatvaranje>
+    <VozacID>4</VozacID>
+    <VoziloID>3</VoziloID>
+    <MjestoStartID>476</MjestoStartID>
+    <MjestoCiljID>18</MjestoCiljID>
+    <StatusNaloga>1</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>5</IDNalog>
+    <Otvaranje>2020-10-15T17:55:00+02:00</Otvaranje>
+    <Zatvaranje>2020-11-19T17:55:00+01:00</Zatvaranje>
+    <VozacID>7</VozacID>
+    <VoziloID>4</VoziloID>
+    <MjestoStartID>368</MjestoStartID>
+    <MjestoCiljID>57</MjestoCiljID>
+    <StatusNaloga>2</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>60</IDNalog>
+    <Otvaranje>2020-11-27T10:49:00+01:00</Otvaranje>
+    <Zatvaranje>2020-11-29T10:49:00+01:00</Zatvaranje>
+    <VozacID>3</VozacID>
+    <VoziloID>1</VoziloID>
+    <MjestoStartID>134</MjestoStartID>
+    <MjestoCiljID>35</MjestoCiljID>
+    <StatusNaloga>2</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>61</IDNalog>
+    <Otvaranje>2021-05-06T18:04:00+02:00</Otvaranje>
+    <Zatvaranje>2021-06-01T18:04:00+02:00</Zatvaranje>
+    <VozacID>4</VozacID>
+    <VoziloID>3</VoziloID>
+    <MjestoStartID>459</MjestoStartID>
+    <MjestoCiljID>498</MjestoCiljID>
+    <StatusNaloga>3</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>62</IDNalog>
+    <Otvaranje>2021-04-01T18:28:00+02:00</Otvaranje>
+    <Zatvaranje>2021-04-08T18:28:00+02:00</Zatvaranje>
+    <VozacID>2</VozacID>
+    <VoziloID>2</VoziloID>
+    <MjestoStartID>178</MjestoStartID>
+    <MjestoCiljID>134</MjestoCiljID>
+    <StatusNaloga>2</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>67</IDNalog>
+    <Otvaranje>2020-11-27T10:49:00+01:00</Otvaranje>
+    <Zatvaranje>2020-11-27T10:49:00+01:00</Zatvaranje>
+    <VozacID>3</VozacID>
+    <VoziloID>4</VoziloID>
+    <MjestoStartID>134</MjestoStartID>
+    <MjestoCiljID>35</MjestoCiljID>
+    <StatusNaloga>2</StatusNaloga>
+  </PUTNI_NALOZI>
+  <PUTNI_NALOZI>
+    <IDNalog>68</IDNalog>
+    <Otvaranje>2021-04-01T18:04:00+02:00</Otvaranje>
+    <Zatvaranje>2021-04-08T18:04:00+02:00</Zatvaranje>
+    <VozacID>1</VozacID>
+    <VoziloID>1</VoziloID>
+    <MjestoStartID>459</MjestoStartID>
+    <MjestoCiljID>498</MjestoCiljID>
+    <StatusNaloga>1</StatusNaloga>
+  </PUTNI_NALOZI>
+</SviPodaci>

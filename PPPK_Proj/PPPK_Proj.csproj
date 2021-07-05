@@ -300,9 +300,18 @@
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
     <Content Include="Resources\Projekt.sql" />
+    <Content Include="Resources\XML\DRZAVE.xml" />
+    <Content Include="Resources\XML\GRADOVI.xml" />
+    <Content Include="Resources\XML\PUTNI_NALOZI.xml" />
+    <Content Include="Resources\XML\SERVISI.xml" />
+    <Content Include="Resources\XML\SERVISNA_KNJIGA.xml" />
+    <Content Include="Resources\XML\SERVIS_STAVKE.xml" />
+    <Content Include="Resources\XML\VOZACI.xml" />
+    <Content Include="Resources\XML\VOZILA.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

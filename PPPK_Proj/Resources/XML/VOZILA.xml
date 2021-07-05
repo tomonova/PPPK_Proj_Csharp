@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="VOZILA" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="VOZILA">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDVozilo" type="xs:int" minOccurs="0" />
+                <xs:element name="Marka" type="xs:string" minOccurs="0" />
+                <xs:element name="Tip" type="xs:string" minOccurs="0" />
+                <xs:element name="GodinaProizvodnje" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="GodinaUnosa" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="InicijalniKM" type="xs:int" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <VOZILA>
+    <IDVozilo>1</IDVozilo>
+    <Marka>Citroen</Marka>
+    <Tip>Spaček</Tip>
+    <GodinaProizvodnje>1980-10-10T00:00:00+02:00</GodinaProizvodnje>
+    <GodinaUnosa>2020-05-15T00:00:00+02:00</GodinaUnosa>
+    <InicijalniKM>345765</InicijalniKM>
+  </VOZILA>
+  <VOZILA>
+    <IDVozilo>2</IDVozilo>
+    <Marka>Zastava</Marka>
+    <Tip>1300</Tip>
+    <GodinaProizvodnje>1963-03-14T00:00:00+01:00</GodinaProizvodnje>
+    <GodinaUnosa>2020-10-10T00:00:00+02:00</GodinaUnosa>
+    <InicijalniKM>567324</InicijalniKM>
+  </VOZILA>
+  <VOZILA>
+    <IDVozilo>3</IDVozilo>
+    <Marka>Moskvič</Marka>
+    <Tip>2140 AZLK</Tip>
+    <GodinaProizvodnje>1984-12-24T00:00:00+01:00</GodinaProizvodnje>
+    <GodinaUnosa>2020-01-24T00:00:00+01:00</GodinaUnosa>
+    <InicijalniKM>298765</InicijalniKM>
+  </VOZILA>
+  <VOZILA>
+    <IDVozilo>4</IDVozilo>
+    <Marka>Yugo</Marka>
+    <Tip>Florida</Tip>
+    <GodinaProizvodnje>1989-04-19T00:00:00+02:00</GodinaProizvodnje>
+    <GodinaUnosa>2020-09-15T00:00:00+02:00</GodinaUnosa>
+    <InicijalniKM>178623</InicijalniKM>
+  </VOZILA>
+</SviPodaci>

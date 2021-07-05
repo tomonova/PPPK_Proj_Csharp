@@ -45,10 +45,16 @@ namespace PPPK_Proj
         {
             lbVozaci.DataSource = null;
             lbVozaci.Items.Clear();
+            tbIme.Clear();
+            tbMobitel.Clear();
+            tbPrezime.Clear();
+            tbVozacka.Clear();
             btnNoviVozac.Enabled = false;
             btnObrisi.Enabled = false;
             btnUrediVozaca.Enabled = false;
             putniNaloziToolStripMenuItem.Enabled = false;
+            servisiToolStripMenuItem.Enabled = false;
+
         }
 
         private void lbVozaci_SelectedIndexChanged(object sender, EventArgs e)
@@ -166,6 +172,7 @@ namespace PPPK_Proj
             btnObrisi.Enabled = true;
             btnUrediVozaca.Enabled = true;
             putniNaloziToolStripMenuItem.Enabled = true;
+            servisiToolStripMenuItem.Enabled = true;
         }
 
         private void brisanjeBazeToolStripMenuItem_Click(object sender, EventArgs e)

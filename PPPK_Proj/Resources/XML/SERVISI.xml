@@ -1,0 +1,75 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="SERVISI" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="SERVISI">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDServisStavka" type="xs:int" minOccurs="0" />
+                <xs:element name="ServisID" type="xs:int" minOccurs="0" />
+                <xs:element name="StavkaID" type="xs:int" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <SERVISI>
+    <IDServisStavka>28</IDServisStavka>
+    <ServisID>42</ServisID>
+    <StavkaID>5</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>29</IDServisStavka>
+    <ServisID>42</ServisID>
+    <StavkaID>1</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>30</IDServisStavka>
+    <ServisID>42</ServisID>
+    <StavkaID>10</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>31</IDServisStavka>
+    <ServisID>42</ServisID>
+    <StavkaID>9</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>43</IDServisStavka>
+    <ServisID>41</ServisID>
+    <StavkaID>10</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>44</IDServisStavka>
+    <ServisID>41</ServisID>
+    <StavkaID>9</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>45</IDServisStavka>
+    <ServisID>40</ServisID>
+    <StavkaID>7</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>46</IDServisStavka>
+    <ServisID>40</ServisID>
+    <StavkaID>4</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>47</IDServisStavka>
+    <ServisID>40</ServisID>
+    <StavkaID>8</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>48</IDServisStavka>
+    <ServisID>40</ServisID>
+    <StavkaID>10</StavkaID>
+  </SERVISI>
+  <SERVISI>
+    <IDServisStavka>49</IDServisStavka>
+    <ServisID>40</ServisID>
+    <StavkaID>3</StavkaID>
+  </SERVISI>
+</SviPodaci>

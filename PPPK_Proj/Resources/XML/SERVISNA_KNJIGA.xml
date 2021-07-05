@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="SERVISNA_KNJIGA" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="SERVISNA_KNJIGA">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDServis" type="xs:int" minOccurs="0" />
+                <xs:element name="VoziloID" type="xs:int" minOccurs="0" />
+                <xs:element name="Datum" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="Trosak" type="xs:decimal" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <SERVISNA_KNJIGA>
+    <IDServis>40</IDServis>
+    <VoziloID>1</VoziloID>
+    <Datum>2021-07-11T00:00:00+02:00</Datum>
+    <Trosak>27419.00</Trosak>
+  </SERVISNA_KNJIGA>
+  <SERVISNA_KNJIGA>
+    <IDServis>41</IDServis>
+    <VoziloID>2</VoziloID>
+    <Datum>2021-06-25T00:00:00+02:00</Datum>
+    <Trosak>8395.00</Trosak>
+  </SERVISNA_KNJIGA>
+  <SERVISNA_KNJIGA>
+    <IDServis>42</IDServis>
+    <VoziloID>2</VoziloID>
+    <Datum>2021-08-04T00:00:00+02:00</Datum>
+    <Trosak>6046.00</Trosak>
+  </SERVISNA_KNJIGA>
+</SviPodaci>

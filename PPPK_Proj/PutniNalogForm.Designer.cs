@@ -277,6 +277,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.lblNalogID);
             this.Name = "PutniNalogForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Putni Nalog";
             this.Load += new System.EventHandler(this.PutniNalog_Load);
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -1,0 +1,70 @@
+<?xml version="1.0" standalone="yes"?>
+<SviPodaci>
+  <xs:schema id="SviPodaci" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="SviPodaci" msdata:IsDataSet="true" msdata:MainDataTable="SERVIS_STAVKE" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="SERVIS_STAVKE">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="IDStavka" type="xs:int" minOccurs="0" />
+                <xs:element name="Naziv" type="xs:string" minOccurs="0" />
+                <xs:element name="Cijena" type="xs:decimal" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <SERVIS_STAVKE>
+    <IDStavka>1</IDStavka>
+    <Naziv>Gefufna</Naziv>
+    <Cijena>100.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>2</IDStavka>
+    <Naziv>Getriba</Naziv>
+    <Cijena>7500.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>3</IDStavka>
+    <Naziv>Boš pumpa</Naziv>
+    <Cijena>12300.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>4</IDStavka>
+    <Naziv>Mirišljavi borić</Naziv>
+    <Cijena>20.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>5</IDStavka>
+    <Naziv>Alnaser</Naziv>
+    <Cijena>749.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>6</IDStavka>
+    <Naziv>Cincilator</Naziv>
+    <Cijena>4520.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>7</IDStavka>
+    <Naziv>Cinšpula</Naziv>
+    <Cijena>359.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>8</IDStavka>
+    <Naziv>Kuplung</Naziv>
+    <Cijena>9543.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>9</IDStavka>
+    <Naziv>Štosdenfer</Naziv>
+    <Cijena>3198.00</Cijena>
+  </SERVIS_STAVKE>
+  <SERVIS_STAVKE>
+    <IDStavka>10</IDStavka>
+    <Naziv>Šoferšajba</Naziv>
+    <Cijena>5197.00</Cijena>
+  </SERVIS_STAVKE>
+</SviPodaci>
